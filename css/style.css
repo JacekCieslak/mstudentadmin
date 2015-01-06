@@ -1,0 +1,67 @@
+/*panel logowania*/
+.panel-heading {
+    padding: 5px 15px;
+}
+
+.panel-footer {
+	padding: 1px 15px;
+	color: #A0A0A0;
+}
+
+.profile-img {
+	width: 196px;
+	height: 196px;
+	margin: 0 auto 20px;
+	display: block;
+}
+
+.text-img{
+	margin: 0 auto 20px;
+	display: block;
+}	
+	
+}
+
+.menu-img{
+	width: 26px;
+	height: 26px;
+}
+
+input[id="newGroup"] {
+	 width: 50px;
+    display:inline-block;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.selectpicker 
+{
+	 margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+}
+
+.dodaj{
+	float:right;
+	margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 50px;
+}
+.textCourse{
+	margin-left: 10px;
+	color: black;
+}
+
+input[id="newCourse"] {
+		width: 150px;
+    display:inline-block;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-transform:uppercase;
+}
+
+input[id="sizeCourse"] {
+		width: 50px;
+    display:inline-block;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
