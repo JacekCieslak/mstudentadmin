@@ -16,16 +16,16 @@ $(document).on("click", ".tablebutton", function(evt){
 		var name = $('input[id="course_'+id+'"]').val();
 		var group = $('input[id="group_'+id+'"]').val();
 		
-		var result = confirm("Czy na pewno chcesz usunąć Grupę L"+group+" z przedmiotu "+name+"?");
+		var result = confirm("Czy na pewno chcesz usunąć przedmiot <b>"+name+"</b> wraz ze wszytkimi grupami oraz studentami należacymi do tego przedmiotu?");
 		if ( result== true) {
 			$.ajax({
 						type:'GET',
-					     url:"http://localhost:8080/mstudent/adminstrator/courses/"+id,
+					     url:"http://localhost:8080/mstudent/adminstrator/courses/deleteusers/"+name,
 					     async: false,		
 					     contentType: 'application/x-www-form-urlencoded', 
 					  	statusCode: {
 						    200: function() {
-						      performDelete(id);
+						      performDelete(id, name);
 						  		}
 						 },
 					     success: function(){},
@@ -70,7 +70,7 @@ $(document).on("click", ".tablebutton", function(evt){
 							      cannotChange(newName);
 							  		},
 							  		404: function() {
-							      canChange(oldName, newName);
+							      canChange(id, oldName, newName);
 							  		}
 							 },
 						     success: function(){},
@@ -152,10 +152,10 @@ $(document).ready(function () {
 
 					  	statusCode: {
 						    200: function() {
-						      cannotupdateCourse(name, i);
+						      cannotInsertCourse(name, i);
 						  		},
 						  		404: function() {
-						      canupdateCourse(name, i);
+						      canInsertCourse(name, i);
 						  		}
 						 },
 					     success: function(){},
@@ -175,7 +175,7 @@ $(document).ready(function () {
 	function cannotChange(name){
 		alert("Istnieje juz przedmiot: "+name);
 	}
-	function cannotupdateCourse(name, group){
+	function cannotInsertCourse(name, group){
 		alert("Istnieje juz grupa laboratoryjna L"+group+" przedmiotu: "+name);
 	}
 
@@ -205,11 +205,11 @@ $(document).ready(function () {
 
 	
 
-	function canChange(oldName, newName){
+	function canChange(id, oldName, newName){
 
 				$.ajax({
 						type:"POST",
-					     url:"http://localhost:8080/mstudent/adminstrator/courses/updatecourses?name="+name,
+					     url:"http://localhost:8080/mstudent/adminstrator/courses/updatecourse?oldname="+oldName+"&newname="+newName,
 					     dataType: 'json',
 					     async: false,
 
@@ -226,20 +226,22 @@ $(document).ready(function () {
 
 				$('span[id="nameSpan_'+id+'"]').css("font-weight","Bold");
 				$('span[id="groupSpan_'+id+'"]').css("font-weight","Bold");
-
+				$('span[id="nameSpan_'+id+'"]').text(newName);
 	}
 
-	function canupdateCourse(name, group){
+	function canInsertCourse(name, group){
 
 				$.ajax({
 						type:"POST",
-					     url:"http://localhost:8080/mstudent/adminstrator/courses/updatecourse?name="+name+"&group="+group,
+					     url:"http://localhost:8080/mstudent/adminstrator/courses/insertcourse?name="+name+"&group="+group,
 					     dataType: 'json',
 					     async: false,
 
 					  	statusCode: {
 						    200: function() {
 						      alert("Dodano nową grupę: "+name+" L"+group);
+						  		$("#myTable").empty();
+
 						  		}
 						 },
 					     success: function(){},
@@ -248,17 +250,35 @@ $(document).ready(function () {
 			   
 					     }
 					});
+			getGroupedCourses();
+			showPages();
 
 	}
 
-	function performDelete(id){
-		var tr = $("#tr_"+id);
-        tr.css("background-color","#FF3700");
+	function performDelete(id,name){
+		$.ajax({
+						type:'GET',
+					     url:"http://localhost:8080/mstudent/adminstrator/courses/deletecourse/"+name,
+					     async: false,		
+					     contentType: 'application/x-www-form-urlencoded', 
+					  	statusCode: {
+						    200: function() {
+						      var tr = $("#tr_"+id);
+						        tr.css("background-color","#FF3700");
 
-        tr.fadeOut(400, function(){
-            tr.remove();
-        });
-		alert("Grupa została usunięta");
+						       
+								alert("Grupa została usunięta");
+						  		}
+						 },
+					     success: function(){},
+					     error:  function(jqXHR, textStatus, errorThrown) {
+					     	if(textStatus > 500){
+			        		alert("Can not connect to server! " );}
+			   
+					     }
+					});
+		
+		
 	}
 	function showPages()
 
@@ -310,6 +330,10 @@ $(document).ready(function () {
 	    $("#myTable").append(tr);
 	     numer++;
   	}
+  		$('input[id^="course_"]').hide();
+		$('input[id^="group_"]').hide();
+		$('button[id^="update_"]').hide();
+		$('button[id^="cancel_"]').hide();
     	// console.log(data);
     	// alert(JSON.stringify(data));
     	// var arg = JSON.parse(data);

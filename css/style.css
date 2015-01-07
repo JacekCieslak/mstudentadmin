@@ -46,6 +46,13 @@ input[id="newGroup"] {
     margin-bottom: 10px;
     margin-right: 50px;
 }
+
+.show{
+	float:right;
+	margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 50px;
+}
 .textCourse{
 	margin-left: 10px;
 	color: black;

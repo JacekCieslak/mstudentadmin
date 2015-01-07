@@ -18,7 +18,7 @@ $(document).on("click", ".tablebutton", function(evt){
 		if ( result== true) {
 			$.ajax({
 						type:'GET',
-					     url:"http://localhost:8080/mstudent/adminstrator/courses/"+id,
+					     url:"http://localhost:8080/mstudent/adminstrator/courses/deletegroup/"+id,
 					     async: false,		
 					     contentType: 'application/x-www-form-urlencoded', 
 					  	statusCode: {
@@ -188,7 +188,7 @@ $(document).ready(function () {
 			   
 					     }
 					});
-
+				$('span[id="nameSpan_'+id+'"]').text(name);
 				$('span[id="nameSpan_'+id+'"]').css("font-weight","Bold");
 				$('span[id="groupSpan_'+id+'"]').css("font-weight","Bold");
 
