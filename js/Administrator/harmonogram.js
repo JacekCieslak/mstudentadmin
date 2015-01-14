@@ -157,7 +157,7 @@
 				url:url+"/adminstrator/schedule/addschedule?classes="+classes+"&hour="+hour+"&day="+day+"&week="+week+"&place="+place+"&audytorium="+audytorium+"&information="+info,
 				dataType: 'json',
 				async: false,
-				success: function(data){ onSuccessInsertHarmonogram()},
+				success: function(data){ onSuccessInsertHarmonogram(data)},
 				error:  function(jqXHR, textStatus, errorThrown) {
 					if(textStatus > 500){
 				    	alert("Can not connect to server! " );}
@@ -174,6 +174,7 @@ function onSuccessInsertHarmonogram(){
 
 function  onSuccessCreateHarmonogram(data)
 {
+	alert(data.toString());
 	var dayArray = ["1","2","3","4","5","6","7"];
 	for(var h = 8 ; h <=20 ; h++ )
 	{
@@ -192,6 +193,7 @@ function  onSuccessCreateHarmonogram(data)
 
 				
 				if(dayArray[d] === data[i].day){
+					alert("jest");
 					if(l % 2 === 0){
 						status = true;
 						if(data[i].classes === 'Wykład')

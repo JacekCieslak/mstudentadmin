@@ -18,6 +18,8 @@ $(document).ready(function () {
 
   		var sId = 's234543245';
 		writeCookie('sessionId', sId, 3);
+
+
   		for (var i in data)
   				result.push(i, data[i]);
     	if(result[3] == true)
@@ -45,7 +47,7 @@ function writeCookie(name,value,days) {
     var date, expires;
     if (days) {
         date = new Date();
-        date.setTime(date.getTime()+(days*24*60*60*1000));
+        date.setTime(date.getTime()+(days*60*60*1000));
         expires = "; expires=" + date.toGMTString();
             }else{
         expires = "";

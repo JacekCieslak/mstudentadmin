@@ -50,24 +50,30 @@
 			<div class="row clearfix">
 				<div class="col-md-3 column">
 				<div class="panel-group" id="accordion">
-					  <div class="panel panel-default">
+					  <div class="panel panel-primary">
 			              <div class="panel-heading">
 			                <h4 class="panel-title">
-			                  <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"><span class="glyphicon glyphicon-folder-close">
+			                  <a data-toggle="collapse" ><span class="glyphicon glyphicon-folder-close">
 			                    </span>Menu</a>
 			                </h4>
 			              </div>
 			              <div id="collapseOne" class="panel-collapse collapse in">
 			                <ul class="list-group">
-			                  <li class="list-group-item"><span class="glyphicon glyphicon-book text-primary"></span><a href="przedmioty.html">Przedmioty</a>
+ 							  <li class="list-group-item"><span class="glyphicon glyphicon-home text-primary"></span><a href="index.html">Home</a>
+
+			                  <li class="list-group-item"><span class="glyphicon glyphicon-book text-success"></span><a href="przedmioty.html">Przedmioty</a>
 			                    
 			                  </li>
 
-			                  <li class="list-group-item"><span class="glyphicon glyphicon-list-alt text-success"></span><a href="grupy.html">Grupy</a></li>
+			                  <li class="list-group-item"><span class="glyphicon glyphicon-list-alt text-primary"></span><a href="grupy.html">Grupy</a></li>
 
-			                  <li class="list-group-item"><span class="glyphicon glyphicon-user text-info"></span><a href="studenci.html">Studenci</a></li>
+			                  <li class="list-group-item"><span class="glyphicon glyphicon-user text-success"></span><a href="studenci.html">Studenci</a></li>
 
-			                  <li class="list-group-item"> <span class="glyphicon glyphicon-time text-success"></span><a href="harmonogram.html">Harmonogram</a></li>
+			                  <li class="list-group-item"> <span class="glyphicon glyphicon-time text-primary"></span><a href="harmonogram.html">Harmonogram</a></li>
+
+			                   <li class="list-group-item"> <span class="glyphicon glyphicon-stats text-success"></span><a href="oceny.html">Oceny</a></li>
+
+			                    <li class="list-group-item"> <span class="glyphicon glyphicon-folder-open text-primary"></span><a href="materialy.html">Materiały</a></li>
 
 			                </ul>
 			              </div>
@@ -82,9 +88,9 @@
 							<h3 class="panel-title">Wyswietl Grupe</h3>
 						</div>
 
-							<select class="selectpicker" id="coursesSelectpicker" data-style="btn-primary">
+							<select class="selectpicker" id="coursesSelectpicker" data-style="btn-inverse">
 							</select>
-							   Grupa L: <select class="selectpicker" id="groupsSelectpicker" data-style="btn-primary">
+							   Grupa L: <select class="selectpicker" id="groupsSelectpicker" data-style="btn-inverse">
 							</select>
 							<button type="button"  class="show btn btn-success">Wyswietl</button>
 					</div>
@@ -95,7 +101,7 @@
 						</div>
 						<div class="input-group"> <span class="input-group-addon">Filtruj</span>
 
-					    <input id="filter" type="text" class="form-control" placeholder="Type here...">
+					    <input id="filter" type="text" class="form-control" placeholder="Wyszukaj...">
 					</div>
 					 <table id="mytable" class="table table-bordred table-striped">
 			          <thead>

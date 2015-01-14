@@ -27,7 +27,7 @@
 
 $(document).ready(function () {
 	var sId = readCookie('sessionId')
-	alert(sId);
+//	alert(sId);
 
 	});
 

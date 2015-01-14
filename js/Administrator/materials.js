@@ -1,6 +1,7 @@
 
- var url = "http://localhost:8080/mstudent"
- //var url = "http://mstudentservice.jelastic.dogado.eu"
+ //var url = "http://localhost:8080/mstudent"
+ var url = "http://mstudentservice.jelastic.dogado.eu"
+
 
 $(document).on("click", ".tablebutton", function(evt){
 
@@ -61,44 +62,38 @@ $(document).on("click", ".tablebutton", function(evt){
 			var name = $('input[id="course_'+id+'"]').val();
 			var group = $('input[id="group_'+id+'"]').val();
 
-			var regCourse = /^[A-Z]([A-Z]|[a-z]|\s|.\.|\-|[0-9])+$/;
-			var regGroup  = /^(1[0-5]?|[2-9]{1})$/;
+			alert(id+" "+name+" "+group);
 
-			if(regCourse.test(name) && regGroup.test(group)){
-				var TandF = confirm("Czy chcesz dodać nową grupę: "+name.toUpperCase()+" L: "+group);
-				if(TandF){
-					$.ajax({
-								type:"GET",
-							     url:url+"/adminstrator/courses/"+group+"/"+name,
-							     dataType: 'json',
-							     async: false,
 
-							  	statusCode: {
-								    200: function() {
-								      cannotChange();
-								  		},
-								  		404: function() {
-								      canChange(id, name, group);
-								  		}
-								 },
-							     success: function(){},
-							     error:  function(jqXHR, textStatus, errorThrown) {
-							     	if(textStatus > 500){
-					        		alert("Can not connect to server! " );}
-					   
-							     }
-							});
+				$.ajax({
+							type:"GET",
+						     url:url+"/adminstrator/courses/"+group+"/"+name,
+						     dataType: 'json',
+						     async: false,
 
-					$('input[id="course_'+id+'"]').hide();
-					$('input[id="group_'+id+'"]').hide();
-					$('button[id="update_'+id+'"]').hide();
-					$('button[id="cancel_'+id+'"]').hide();
-					$('span[id="nameSpan_'+id+'"]').show();
-					$('span[id="groupSpan_'+id+'"]').show();
-					$('button[id="edit_'+id+'"]').parent().show();
-				}
-			}else
-				alert("Niepoprawna Tytuł przedmiotu lub wartość oceny! Tytuł powinien zaczynać sie z dużej litery i może posiadać znaki  -., Grupy mogą być z zakresu 1-15. ");
+						  	statusCode: {
+							    200: function() {
+							      cannotChange();
+							  		},
+							  		404: function() {
+							      canChange(id, name, group);
+							  		}
+							 },
+						     success: function(){},
+						     error:  function(jqXHR, textStatus, errorThrown) {
+						     	if(textStatus > 500){
+				        		alert("Can not connect to server! " );}
+				   
+						     }
+						});
+
+			$('input[id="course_'+id+'"]').hide();
+			$('input[id="group_'+id+'"]').hide();
+			$('button[id="update_'+id+'"]').hide();
+			$('button[id="cancel_'+id+'"]').hide();
+			$('span[id="nameSpan_'+id+'"]').show();
+			$('span[id="groupSpan_'+id+'"]').show();
+			$('button[id="edit_'+id+'"]').parent().show();
 	}
 	else if(wyrazenieCancel.test(clickButton)){
 
@@ -146,35 +141,47 @@ $(document).ready(function () {
 		var name = $('.selectpicker  option:selected').text();
 		var group = $('#newGroup').val();
 
-		var regGroup  = /^(1[0-5]?|[2-9]{1})$/;
+		alert(name+" "+group);
 
 
-			if(regGroup.test(group)){
-				$.ajax({
-							type:"GET",
-						     url:url+"/adminstrator/courses/"+group+"/"+name,
-						     dataType: 'json',
-						     async: false,
+			$.ajax({
+						type:"GET",
+					     url:url+"/adminstrator/courses/"+group+"/"+name,
+					     dataType: 'json',
+					     async: false,
 
-						  	statusCode: {
-							    200: function() {
-							      cannotChange();
-							  		},
-							  		404: function() {
-							      canInsertGroup(name, group);
-							  		}
-							 },
-						     error:  function(jqXHR, textStatus, errorThrown) {
-						     	if(textStatus > 500){
-				        		alert("Can not connect to server! " );}
-				   
+					  	statusCode: {
+						    200: function() {
+						      cannotChange();
+						  		},
+						  		404: function() {
+						      canInsertGroup(name, group);
+						  		}
+						 },
+					     success: function(){},
+					     error:  function(jqXHR, textStatus, errorThrown) {
+					     	if(textStatus > 500){
+			        		alert("Can not connect to server! " );}
+			   
 					     }
-				});
-			}else 
-				alert("Grupy mogą być z zakresu 1-15!");
-
-
+					});
 	});
+	
+	$("#upload").submit(function() {
+
+    var url = "http://localhost:8080/mstudent/file/upload"; // the script where you handle the form input.
+
+    $.ajax({
+           type: "POST",
+           url: url,
+           success: function(data)
+           {
+               alert(data); // show response from the php script.
+           }
+         });
+
+    return false; // avoid to execute the actual submit of the form.
+});
 });
 
 

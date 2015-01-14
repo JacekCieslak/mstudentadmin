@@ -143,3 +143,12 @@ body {
   margin: 0px;
   padding: 0px;
 }
+@font-face {
+   font-family: mstudentFonts;
+   src: url(../fonts/Sketchtica.ttf);
+   
+}
+.mstudentheader
+{
+  color: blue;
+}

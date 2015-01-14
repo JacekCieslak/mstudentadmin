@@ -1,7 +1,7 @@
 var oldName;
 var newName;
-//var url = "http://localhost:8080/mstudent";
-var url = "http://mstudentservice.jelastic.dogado.eu"
+var url = "http://localhost:8080/mstudent";
+//var url = "http://mstudentservice.jelastic.dogado.eu"
 
 $(document).on("click", ".tablebutton", function(evt){
 	var wyrazenieDelete = /delete_[0-9]*/;
@@ -56,38 +56,41 @@ $(document).on("click", ".tablebutton", function(evt){
 		var id = $(this).parent().parent().parent().attr('value');
 
 		 newName = $('input[id="course_'+id+'"]').val();
+		 var regCourse = /^[A-Z]([A-Z]|[a-z]|\s|.\.|\-|[0-9])+$/;
 
-			var TandF = confirm("czy chcesz zmienić nazwę przedmiotu: "+oldName+" na: "+newName);
-			if(TandF)
-			{
-				$.ajax({
-							type:"GET",
-						     url:url+"/adminstrator/courses/getcourse?name="+newName,
-						     dataType: 'json',
-						     async: false,
+		 	if(regCourse.test(newName)){
+				var TandF = confirm("czy chcesz zmienić nazwę przedmiotu: "+oldName+" na: "+newName);
+				if(TandF)
+				{
+					$.ajax({
+								type:"GET",
+							     url:url+"/adminstrator/courses/getcourse?name="+newName,
+							     dataType: 'json',
+							     async: false,
 
-						  	statusCode: {
-							    200: function() {
-							      cannotChange(newName);
-							  		},
-							  		404: function() {
-							      canChange(id, oldName, newName);
-							  		}
-							 },
-						     success: function(){},
-						     error:  function(jqXHR, textStatus, errorThrown) {
-						     	if(textStatus > 500){
-				        		alert("Can not connect to server! " );}
+							  	statusCode: {
+								    200: function() {
+								      cannotChange(newName);
+								  		},
+								  		404: function() {
+								      canChange(id, oldName, newName);
+								  		}
+								 },
+							     success: function(){},
+							     error:  function(jqXHR, textStatus, errorThrown) {
+							     	if(textStatus > 500){
+					        		alert("Can not connect to server! " );}
 
-						     }
-						});
-			}
-
-		$('input[id="course_'+id+'"]').hide();
-		$('button[id="update_'+id+'"]').hide();
-		$('button[id="cancel_'+id+'"]').hide();
-		$('span[id="nameSpan_'+id+'"]').show();
-		$('button[id="edit_'+id+'"]').parent().show();
+							     }
+							});
+				}
+			$('input[id="course_'+id+'"]').hide();
+			$('button[id="update_'+id+'"]').hide();
+			$('button[id="cancel_'+id+'"]').hide();
+			$('span[id="nameSpan_'+id+'"]').show();
+			$('button[id="edit_'+id+'"]').parent().show();
+		}else
+			alert("Niepoprawna tytuł nowego przedmiotu! Tytuł powinien zaczynać sie z dużej litery i może posiadać znaki  -.,")
 	}
 	else if(wyrazenieCancel.test(clickButton)){
 		var id = $(this).parent().parent().parent().attr('value');
@@ -135,50 +138,48 @@ $(document).ready(function () {
 
 	$( ".dodaj" ).click(function() {
 
-		var regCourse = "/[A-Z]*\ ?([A-Z]*\-?[A-Z]*\ ?[0-9]?)/";
-		var regGroup  = "/(1[0-5]?|[2-9]{1})$/";
+		var regCourse = /^[A-Z]([A-Z]|[a-z]|\s|.\.|\-|[0-9])+$/;
+		var regGroup  = /^(1[0-5]?|[2-9]{1})$/;
 
 
 
 		var name = $('#newCourse ').val();
-		name.toUpperCase();
+		name = name.toUpperCase();
 		var sizeGroup = $('#sizeCourse').val();
-			
+		alert(regCourse.test(name) );
+		alert(regGroup.test(sizeGroup));
 
-		if(name.test(regCourse)  !== true){
-			alert("Niepoprawna nazwa przedmiotu! Dostępne wyłącznie Litery, cyfry oraz znak '-'. ");
-
-		}else if(sizeGroup.test(regGroup) === true ){
+		if(regCourse.test(name) && regGroup.test(sizeGroup)){
 			var TandF = confirm("Czy chcesz dodać/zwięjszyć nowy przedmiot: "+name.toUpperCase()+" składającej się z  "+sizeGroup+ " grup?");
+			if(TandF){
+				for(i=1 ; i <=parseInt(sizeGroup) ; i++){
 
-			for(i=1 ; i <=parseInt(sizeGroup) ; i++){
+						$.ajax({
+								type:"GET",
+							     url:url+"/adminstrator/courses/"+i+"/"+name,
+							     dataType: 'json',
+							     async: false,
 
-					$.ajax({
-							type:"GET",
-						     url:url+"/adminstrator/courses/"+i+"/"+name,
-						     dataType: 'json',
-						     async: false,
+							  	statusCode: {
+								    200: function() {
+								      cannotInsertCourse(name, i);
+								  		},
+								  		404: function() {
+								      canInsertCourse(name, i);
+								  		}
+								 },
+							     success: function(){},
+							     error:  function(jqXHR, textStatus, errorThrown) {
+							     	if(textStatus > 500){
+					        		alert("Can not connect to server! " );}
 
-						  	statusCode: {
-							    200: function() {
-							      cannotInsertCourse(name, i);
-							  		},
-							  		404: function() {
-							      canInsertCourse(name, i);
-							  		}
-							 },
-						     success: function(){},
-						     error:  function(jqXHR, textStatus, errorThrown) {
-						     	if(textStatus > 500){
-				        		alert("Can not connect to server! " );}
-
-						     }
-						});
-			
+							     }
+							});
+				}
 			}
 		}
 		else {
-			alert("Niepoprawna ilość grup! Dostepna ilość 1 -15.")
+			alert("Niepoprawna Tytuł przedmiotu lub wartość oceny! Tytuł powinien zaczynać sie z dużej litery i może posiadać znaki  -., Grupy mogą być z zakresu 1-15. ");
 			}
 			
 		
