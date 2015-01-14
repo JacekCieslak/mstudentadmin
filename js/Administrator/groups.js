@@ -1,4 +1,7 @@
 
+ //var url = "http://localhost:8080/mstudent"
+ var url = "http://mstudentservice.jelastic.dogado.eu"
+
 $(document).on("click", ".tablebutton", function(evt){
 
 	var wyrazenieDelete = /delete_[0-9]*/;
@@ -18,7 +21,7 @@ $(document).on("click", ".tablebutton", function(evt){
 		if ( result== true) {
 			$.ajax({
 						type:'GET',
-					     url:"http://localhost:8080/mstudent/adminstrator/courses/deletegroup/"+id,
+					     url:url+"/adminstrator/courses/deletegroup/"+id,
 					     async: false,		
 					     contentType: 'application/x-www-form-urlencoded', 
 					  	statusCode: {
@@ -63,7 +66,7 @@ $(document).on("click", ".tablebutton", function(evt){
 
 				$.ajax({
 							type:"GET",
-						     url:"http://localhost:8080/mstudent/adminstrator/courses/"+group+"/"+name,
+						     url:url+"/adminstrator/courses/"+group+"/"+name,
 						     dataType: 'json',
 						     async: false,
 
@@ -142,7 +145,7 @@ $(document).ready(function () {
 
 			$.ajax({
 						type:"GET",
-					     url:"http://localhost:8080/mstudent/adminstrator/courses/"+group+"/"+name,
+					     url:url+"/adminstrator/courses/"+group+"/"+name,
 					     dataType: 'json',
 					     async: false,
 
@@ -174,7 +177,7 @@ $(document).ready(function () {
 
 				$.ajax({
 						type:"POST",
-					     url:"http://localhost:8080/mstudent/adminstrator/courses/"+id+"?name="+name+"&group="+group,
+					     url:url+"/adminstrator/courses/"+id+"?name="+name+"&group="+group,
 					     dataType: 'json',
 					     async: false,
 
@@ -199,7 +202,7 @@ $(document).ready(function () {
 
 				$.ajax({
 						type:"POST",
-					     url:"http://localhost:8080/mstudent/adminstrator/courses/addgroup?name="+name+"&group="+group,
+					     url:url+"/adminstrator/courses/addgroup?name="+name+"&group="+group,
 					     dataType: 'json',
 					     async: false,
 
@@ -293,7 +296,7 @@ $(document).ready(function () {
 function getGroupedCourses() {    
         $.ajax({
 		     type:"GET",
-		     url:"http://localhost:8080/mstudent/common/courses",
+		     url:url+"/common/courses",
 		     dataType: 'json',
 		     async: false,
           	procesdata: true,
@@ -312,7 +315,7 @@ function getGroupedCourses() {
 function getCourses() {    
         $.ajax({
 		     type:"GET",
-		     url:"http://localhost:8080/mstudent/adminstrator/courses",
+		     url:url+"/adminstrator/courses",
 		     dataType: 'json',
 		     async: false,
           	procesdata: true,

@@ -1,80 +1,137 @@
  var url = "http://localhost:8080/mstudent"
-
-//  $(document).on("change", "#coursesSelectpicker", function(evt){
-//         var nameChangeGroup = $('#coursesSelectpicker option:selected').html();
-//         $('#groupsSelectpicker').find('option').remove();
-//         getGroups(nameChangeGroup);
-//         $('.selectpicker').selectpicker('refresh');
+//var url = "http://mstudentservice.jelastic.dogado.eu"
 
 
-
-//  });
-
-
-//  $(document).on("click", ".tablebutton", function(evt){
-
-
-// 	var wyrazenieDelete = /delete_[0-9]*/;
-// 	var wyrazenieStatusFalse = /statusFalse_[0-9]*/;
-// // 	var wyrazenieUpdate = /update_[0-9]*/;
-// // 	var wyrazenieCancel = /cancel_[0-9]*/;
-
-//  	var clickButton = $(this).attr('id');
-
-// 	if( wyrazenieDelete.test(clickButton) ){
-// 		var id = $(this).parent().parent().parent().attr('value');
-
-// 		var name = $('span[id="userSpan_'+id+'"]').text();
-		
-// 		var result = confirm("Czy na pewno chcesz usunąć użytkonika: "+name);
-// 		if ( result== true) {
-// 			$.ajax({
-// 						type:'GET',
-// 					     url:url+"/adminstrator/user/deleteuser/"+id,
-// 					     async: false,		
-// 					     contentType: 'application/x-www-form-urlencoded', 
-// 					  	statusCode: {
-// 						    200: function() {
-// 						      performDelete(id);
-// 						  		}
-// 						 },
-// 					     success: function(){},
-// 					     error:  function(jqXHR, textStatus, errorThrown) {
-// 					     	if(textStatus > 500){
-// 			        		alert("Can not connect to server! " );}
+  $(document).on("click", ".tablebutton", function(evt){
+  		var id = $(this).attr('value');
+  		$.ajax({
+						type:"GET",
+					     url:url+"/adminstrator/schedule/getschedule/"+id,
+					     dataType: 'json',
+					     async: false,
+					     success: function(data){ getScheduleId(data, id)},
+					     error:  function(jqXHR, textStatus, errorThrown) {
+					     	if(textStatus > 500){
+			        		alert("Can not connect to server! " );}
 			   
-// 					     }
-// 					});
-// 	//	$('#coursesSelectpicker').find('option').remove();
-// 		}
-// 	}
-// 	else if(wyrazenieStatusFalse.test(clickButton)){
-		
-//  			 id = $(this).parent().parent().parent().attr('value')
- 			 
- 			
-//  			$.ajax({
-// 						type:'POST',
-// 					     url:url+"/adminstrator/user/adduser/"+id,
-// 					     async: false,		
-// 					     contentType: 'application/x-www-form-urlencoded', 
-// 					  	statusCode: {
+					     }
+				});
+  				$("#preview").show();
+  		
+  });
 
-// 						 },
-// 					     success: function(){addUser(id)},
-// 					     error:  function(jqXHR, textStatus, errorThrown) {
-// 					     	if(textStatus > 500){
-// 			        		alert("Can not connect to server! " );}
-			   
-// 					     }
-// 					});
+  function getScheduleId(data,id){
+  	for(var i in data){
+  		$("#course").html(data[i].classes);
+  		if(data[i].day == "1"){
+  			$("#date").html("Poniedziałek");
+  		}else if(data[i].day == "2"){
+  			$("#date").html("Wtorek");
+  		}else if(data[i].day == "3"){
+  			$("#date").html("Środa");
+  		}else if(data[i].day == "4"){
+  			$("#date").html("Czwartek");
+  		}else if(data[i].day == "5"){
+  			$("#date").html("Piątek");
+  		}else if(data[i].day == "6"){
+  			$("#date").html("Sobota");
+  		}else if(data[i].day == "7"){
+  			$("#date").html("Niedziela");
+  		}
+  		$("#place").html(data[i].place);
+  		$("#week").html(data[i].week);
+  		$("#classes").html(data[i].place);
+  		$("#audy").html(data[i].audytorium);
+  		if(data[i].information === undefined)
+  			$("#info").html("");
+  		else
+  			$("#info").html(data[i].information);
+  	}
+  	$("#id").html(id);
+  }
 
-//  			}
-// });
 
  $(document).ready(function () {
  		createHarmonogram();
+ 		$("#preview").hide();
+ 
+ 		$("#zwin").click(function(){
+  			$("#preview").hide();
+  		});
+ 			$("#id").hide();
+
+
+  		$("#delete").click(function(){
+
+  		var id = $("#id").html();
+  			
+		var result = confirm("Czy na pewno chcesz usunąć to zajęcia?");
+		if ( result== true) {
+			$.ajax({
+						type:'GET',
+					     url:url+"/adminstrator/schedule/deleteschedule/"+id,
+					     async: false,		
+					     contentType: 'application/x-www-form-urlencoded', 
+					  	statusCode: {
+						    200: function() {
+						      		performDelete();
+						  		}
+						 },
+					     success: function(){},
+					     error:  function(jqXHR, textStatus, errorThrown) {
+					     	if(textStatus > 500){
+			        		alert("Can not connect to server! " );}
+			   
+					     }
+			});
+			$("#preview").hide();
+		}
+
+  		});
+
+  		$("#addSChedule").click(function(){
+  			var classes = $("#hClasses :selected").text();
+  			var day = $("#hDay :selected").val();
+  			var hour = $("#hHour :selected").text();
+  			var week = $("#hWeek :selected").text();
+  			var place = $("#hPlace").val();
+  			var audytorium = $("#hAudytorium").val();
+  			var info = $("#hInformation").val();
+
+
+  			var result = confirm("Czy na pewno chcesz dodać to zajęcie?");
+			if ( result== true) {
+	  			$.ajax({
+					type:"GET",
+					url:url+"/adminstrator/schedule/checkschedule/"+hour+"/"+day+"/?week="+week,
+					dataType: 'json',
+					async: false,
+					statusCode: {
+							    200: function() {
+							      cannotInsertHarmonogram();
+							  		},
+							  		404: function() {
+							     canInsertHarmonogram(classes, day, hour, week, place, audytorium, info)
+							  		}
+							 },
+					success: function(data){ },
+					error:  function(jqXHR, textStatus, errorThrown) {
+						if(textStatus > 500){
+					    	alert("Can not connect to server! " );}
+						
+					}
+				});
+	  		}
+
+  		});
+
  });
+
+ function performDelete(){
+ 	alert("Zajęcie zostało usunięte z harmonogramu.");
+ 	$("#myTable").empty();
+	createHarmonogram();
+ }
 
  function createHarmonogram(){
  			$.ajax({
@@ -90,9 +147,34 @@
 				}
 			});
  }
+ function cannotInsertHarmonogram(){
+ 		alert("Istnieje juz takie zajcię");
+ }
+ function canInsertHarmonogram(classes, day, hour, week, place, audytorium, info){
+
+ 			$.ajax({
+				type:"POST",
+				url:url+"/adminstrator/schedule/addschedule?classes="+classes+"&hour="+hour+"&day="+day+"&week="+week+"&place="+place+"&audytorium="+audytorium+"&information="+info,
+				dataType: 'json',
+				async: false,
+				success: function(data){ onSuccessInsertHarmonogram()},
+				error:  function(jqXHR, textStatus, errorThrown) {
+					if(textStatus > 500){
+				    	alert("Can not connect to server! " );}
+					
+				}
+			});
+ }
+
+function onSuccessInsertHarmonogram(){
+	alert("Dodano nowe zajęcie do harmonogramu.")
+	$("#myTable").empty();
+	createHarmonogram();
+}
+
 function  onSuccessCreateHarmonogram(data)
 {
-	var dayArray = ["Poniedziałek","Wtorek","Środa","Czwartek","Piątek","Sobota","Niedziela"];
+	var dayArray = ["1","2","3","4","5","6","7"];
 	for(var h = 8 ; h <=20 ; h++ )
 	{
 		tr = $("<tr>");	
@@ -113,14 +195,19 @@ function  onSuccessCreateHarmonogram(data)
 					if(l % 2 === 0){
 						status = true;
 						if(data[i].classes === 'Wykład')
-							tr.append("<td class='next'><button id='show_"+data[i].id+"' class='tablebutton btn btn-success btn-xs'><span ><bold>W</bold></span></button></td>");
+							tr.append("<td class='next'><button value='"+data[i].id+"' id='show_"+data[i].id+"' class='tablebutton btn btn-success btn-sm'><span ><bold>W</bold></span></button></td>");
 						else if(data[i].classes === 'Konsultacje')
-							tr.append("<td class='next'><button id='show_"+data[i].id+"' class='tablebutton btn btn-warning btn-xs'><span ><bold>K</bold></span></button></td>");
+							tr.append("<td class='next'><button value='"+data[i].id+"' id='show_"+data[i].id+"' class='tablebutton btn btn-warning btn-sm'><span ><bold>K</bold></span></button></td>");
+						else if(data[i].classes === 'Laboratorium')
+							tr.append("<td class='next'><button value='"+data[i].id+"'id='show_"+data[i].id+"' class='tablebutton btn btn-danger btn-sm'><span ><bold>L</bold></span></button></td>");
 					}else{
+						status = true;
 						if(data[i].classes === 'Wykład')
-							tr.append("<td class='second'><button id='show_"+data[i].id+"' class='tablebutton btn btn-success btn-xs'><span ><bold>W</bold></span></button></td>");
+							tr.append("<td class='second'><button value='"+data[i].id+"' id='show_"+data[i].id+"' class='tablebutton btn btn-success btn-sm'><span ><bold>W</bold></span></button></td>");
 						else if(data[i].classes === 'Konsultacje')
-							tr.append("<td class='second'><button id='show_"+data[i].id+"' class='tablebutton btn btn-warning btn-xs'><span ><bold>K</bold></span></button></td>");
+							tr.append("<td class='second'><button value='"+data[i].id+"'i id='show_"+data[i].id+"' class='tablebutton btn btn-warning btn-sm'><span ><bold>K</bold></span></button></td>");
+					else if(data[i].classes === 'Laboratorium')
+							tr.append("<td class='next'><button value='"+data[i].id+"' id='show_"+data[i].id+"' class='tablebutton btn btn-danger btn-sm'><span ><bold>L</bold></span></button></td>");
 					}
 				}
 			}
@@ -133,249 +220,9 @@ function  onSuccessCreateHarmonogram(data)
 			status = false;
 			
 		}
-
-		// for(var i in data)
-		// 	if(h === data[i].hour){
-		// 		var hour = data[i].hour;
-		// 		var day = data[i].day;
-		// 		var classes = data[i].classes;
-		// 		var  tdBody;
-		// 		var  l = 0;
-		// 		for(var d = 0 ; d < 7 ; d++,l++)
-		// 		{
-		// 			if(dayArray[d] === day)
-		// 				 tdBody = "<p  data-placement='top' data-toggle='tooltip' title='Dodaj'><button id='show_"+data[i].id+"' class='tablebutton btn btn-danger btn-xs' data-title='Delete' data-toggle='modal' data-target='#delete' ><span class='glyphicon glyphicon-remove'></span></button><p>"
-		// 			else 
-		// 				tdBody = "";
-		// 			if(l % 2 === 0)
-		// 				tr.append("<td class='next'>"+tdBody+"</td>");
-		// 			else 
-		// 				tr.append("<td class='second'>"+tdBody+"</td>");
-					
-		// 		}
-
-		// 	}
-	
-		
-		
 		tr.append("</tr>");
 		$("#myTable").append(tr);
 	}
 	
 }
  	
-// 		getGroupedCourses();
-
-// 		var name = $(".selectpicker :selected").text(); 
-// 		getGroups(name);
-// 		var id = $("#groupsSelectpicker :selected").text();
-
-// 		getStudents(name, id);
-
-
-
-		
-// 	    (function ($) {
-
-//         $('#filter').keyup(function () {
-        	 
-//             var rex = new RegExp($(this).val(), 'i');
-//             $('.searchable tr').hide();
-//             $('.searchable tr').filter(function () {
-//             	var text = $(this).find('td').not('.ignore').text();
-//                 return rex.test(text);
-//             }).show();
-//             showPages();
-//         })
-
-//     }(jQuery));
-
-// 	showPages();
-
-	
-
-// 	$( ".show" ).click(function() {
-
-
-// 		var name = $("#coursesSelectpicker :selected").text(); 
-// 		var id = $("#groupsSelectpicker :selected").text();
-// 				$.ajax({
-// 						type:"GET",
-// 					     url:url+"/adminstrator/user/users/"+name+"/"+id,
-// 					     dataType: 'json',
-// 					     async: false,
-// 					     tatusCode: {
-// 						  		404: function() {
-// 						      cannotShow()
-// 						  		}
-// 						 },
-// 					     success: function(data){ onSuccessGetStudents(data)},
-// 					     error:  function(jqXHR, textStatus, errorThrown) {
-// 					     	if(textStatus > 500){
-// 			        		alert("Can not connect to server! " );}
-			   
-// 					     }
-// 					});
-
-// 	});
-// });
-
-
-// 	function cannotChange(){
-// 		alert("W tej grupie nie ma zarejestrowanych żadnych studentów"); 
-// 	}
-
-	
-
-// 	function performDelete(id){
-// 		var tr = $("#tr_"+id);
-//         tr.css("background-color","#FF3700");
-
-//         tr.fadeOut(400, function(){
-//             tr.remove();
-//         });
-// 		alert("Użytkownik  została usunięta");
-// 	}
-
-	
-
-// 	function addUser(id){
-// 		$('button[id="statusAddTrue_'+id+'"]').show();
-// 		$('button[id="statusFalse_'+id+'"]').hide();
-// 		alert("Użytkownik został dodany do grupy.");
-// 	}
-// 	function showPages()
-
-// 	{
-// 		$("#myPager").empty();
-// 		$('#myTable').pageMe({pagerSelector:'#myPager',showPrevNext:true,hidePageNumbers:false,perPage:7});
-// 	}
-
-
-  
-
-//   function onSuccessGetStudents(data){
-//   	var numer = 1;
-//   	if(data != null){
-
-//   		 $("#myTable").empty();
-// 	  	for (var i in data){
-// 	  		tr = $("<tr class='even' id='tr_"+data[i].id+"' value="+data[i].id+">");
-// 		    tr.append("<td class='ignore'>" + numer + "</td>");
-// 		    tr.append("<td>" + 
-// 		    			"<span id='userSpan_"+data[i].id+"'>" + data[i].username + "</span>"+
-// 		    			 "</td>");
-// 		    tr.append("<td>" + 
-// 		    			"<span  id='nameSpan_"+data[i].id+"'>" + data[i].name + "</span>"+
-// 		    			"</td>");
-// 		     tr.append("<td>" + 
-// 		    			"<span  id='surNameSpan_"+data[i].id+"'>" + data[i].surname + "</span>"+
-// 		    			"</td>");
-// 		     if(parseInt(data[i].status)){
-// 		     	tr.append("<td>"+
-// 		    				"<p  data-placement='top' data-toggle='tooltip' title='D'>"+
-// 		    					"<button id='statusTrue_"+data[i].id+"' class='tablebutton btn btn-success btn-xs' data-title='statusTrue' data-toggle='modal' data-target='#statusTrue' >"+
-// 		    					"<span class='glyphicon glyphicon-ok'></span></button>"+
-// 		    				"</p>"+
-// 		    				"</td>");
-
-// 		     }else{
-// 		     	 tr.append("<td>"+
-// 		    				"<p  data-placement='top' data-toggle='tooltip' title='Dodaj'>"+
-// 		    					"<button id='statusFalse_"+data[i].id+"' class='tablebutton btn btn-warning btn-xs' data-title='statusFalse' data-toggle='modal' data-target='#statusFalse_' >"+
-// 		    					"<span class='glyphicon glyphicon-remove'></span></button>"+
-// 		    					"<button id='statusAddTrue_"+data[i].id+"' class='tablebutton btn btn-success btn-xs' data-title='statusTrue' data-toggle='modal' data-target='#statusTrue' >"+
-// 		    					"<span class='glyphicon glyphicon-ok'></span></button>"+
-// 		    				"</p>"+
-// 		    				"</td>");
-// 		     }
-// 		    tr.append("<td>"+
-// 		    				"<p data-placement='top' data-toggle='tooltip' title='Delete'>"+
-// 		    					"<button id='delete_"+data[i].id+"' class='tablebutton btn btn-danger btn-xs' data-title='Delete' data-toggle='modal' data-target='#delete' >"+
-// 		    					"<span class='glyphicon glyphicon-trash'></span></button>"+
-// 		    				"</p>"+
-// 		    		  "</td>");
-// 		    tr.append("</tr>");
-		   
-// 		    $("#myTable").append(tr);
-// 		     numer++;
-// 	  	}
-// 	  	$('button[id^="statusAddTrue_"]').hide();
-// 	  }else
-// 	  	alert("brak uzytkowników");
-//     }
-
-// function getGroupedCourses() {    
-//         $.ajax({
-// 		     type:"GET",
-// 		     url: url+"/common/courses",
-// 		     dataType: 'json',
-// 		     async: false,
-//           	procesdata: true,
-
-		  
-// 		     success: onSuccessGroupCourses,
-// 		     error:  function(jqXHR, textStatus, errorThrown) {
-// 		     	console.log('error '+textStatus);
-//         	//	alert("Error... " + textStatus + "        " + errorThrown);
-   
-// 		     }
-
-// 		});
-//     }
-
-   
-
-//     function getGroups(name) {   
-//         $.ajax({
-// 		     type:"GET",
-// 		     url:url+"/adminstrator/user/group/"+name,
-// 		     dataType: 'json',
-// 		     async: false,
-//           	procesdata: true,
-
-		  
-// 		     success: onSuccessGroups,
-// 		     error:  function(jqXHR, textStatus, errorThrown) {
-// 		     	console.log('error '+textStatus);
-//         	//	alert("Error... " + textStatus + "        " + errorThrown);
-   
-// 		     }
-
-// 		});
-//     }
-
-//      function onSuccessGroups(data){
-     	
-
-//   		for(var i in data){
-//   			$("#groupsSelectpicker").append("<option value="+i+">"+data[i].id+"</option");
-//   		}
-//   	}
-
-// 	function onSuccessGroupCourses(data){
-// 	  		for(var i in data){
-// 	  			$("#coursesSelectpicker").append("<option value="+i+">"+data[i].name+"</option");
-// 	  		}
-// 	  }
-
-// 	function getStudents(name, id) {    
-//         $.ajax({
-// 		     type:"GET",
-// 		     url:url+"/adminstrator/user/users/"+name+"/"+id,
-// 		     dataType: 'json',
-// 		     async: false,
-//           	procesdata: true,
-
-		  
-// 		     success: onSuccessGetStudents,
-// 		     error:  function(jqXHR, textStatus, errorThrown) {
-// 		     	console.log('error '+textStatus);
-//         	//	alert("Error... " + textStatus + "        " + errorThrown);
-   
-// 		     }
-
-// 		});
-   
-// }   
-

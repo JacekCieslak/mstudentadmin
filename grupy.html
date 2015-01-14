@@ -48,31 +48,31 @@
 				</div>
 			</div>
 			<div class="row clearfix">
-				<div class="col-md-1 column">
-				</div>
-				<div class="col-md-2 column">
-					<div class="panel-group" id="panel-609752">
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								 <a class="panel-title" data-toggle="collapse" data-parent="#panel-609752" href="#panel-element-979178">Collapsible Group Item #1</a>
-							</div>
-							<div id="panel-element-979178" class="panel-collapse collapse in">
-								<div class="panel-body">
-									Anim pariatur cliche...
-								</div>
-							</div>
-						</div>
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								 <a class="panel-title" data-toggle="collapse" data-parent="#panel-609752" href="#panel-element-575443">Collapsible Group Item #2</a>
-							</div>
-							<div id="panel-element-575443" class="panel-collapse collapse">
-								<div class="panel-body">
-									Anim pariatur cliche...
-								</div>
-							</div>
-						</div>
-					</div>
+				<div class="col-md-3 column">
+				<div class="panel-group" id="accordion">
+					  <div class="panel panel-default">
+			              <div class="panel-heading">
+			                <h4 class="panel-title">
+			                  <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"><span class="glyphicon glyphicon-folder-close">
+			                    </span>Menu</a>
+			                </h4>
+			              </div>
+			              <div id="collapseOne" class="panel-collapse collapse in">
+			                <ul class="list-group">
+			                  <li class="list-group-item"><span class="glyphicon glyphicon-book text-primary"></span><a href="przedmioty.html">Przedmioty</a>
+			                    
+			                  </li>
+
+			                  <li class="list-group-item"><span class="glyphicon glyphicon-list-alt text-success"></span><a href="grupy.html">Grupy</a></li>
+
+			                  <li class="list-group-item"><span class="glyphicon glyphicon-user text-info"></span><a href="studenci.html">Studenci</a></li>
+
+			                  <li class="list-group-item"> <span class="glyphicon glyphicon-time text-success"></span><a href="harmonogram.html">Harmonogram</a></li>
+
+			                </ul>
+			              </div>
+			            </div>
+			        </div>
 				</div>
 				<div class="col-md-1 column">
 				</div>
@@ -82,9 +82,9 @@
 							<h3 class="panel-title">Dodaj Grupe</h3>
 						</div>
 
-							<select class="selectpicker" id="coursesSelectpicker" data-style="btn-primary">
+							<select class="selectpicker" id="coursesSelectpicker" data-style="btn-inverse">
 							</select>
-							   Grupa L: <input id="newGroup" class="form-control btn dropdown-toggle  btn-primary" type="text"/>
+							   Grupa L: <input id="newGroup" class="form-control " type="text"/>
 							<button type="button"  class="dodaj btn btn-success">Dodaj</button>
 					</div>
 					<div class="panel panel-primary">
@@ -117,68 +117,28 @@
 			</div>
 			<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 				<div class="navbar-header">
-					 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="#">Brand</a>
+					 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> 
+					 <img src="img/Logo.png" alt="Mountain View" style="width:75px;height:75px">
+					 
 				</div>
 				
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
-						<li class="active">
-							<a href="#">Link</a>
-						</li>
-						<li>
-							<a href="#">Link</a>
-						</li>
-						<li class="dropdown">
-							 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown<strong class="caret"></strong></a>
-							<ul class="dropdown-menu">
-								<li>
-									<a href="#">Action</a>
-								</li>
-								<li>
-									<a href="#">Another action</a>
-								</li>
-								<li>
-									<a href="#">Something else here</a>
-								</li>
-								<li class="divider">
-								</li>
-								<li>
-									<a href="#">Separated link</a>
-								</li>
-								<li class="divider">
-								</li>
-								<li>
-									<a href="#">One more separated link</a>
-								</li>
-							</ul>
-						</li>
+						<h2 class="mstudentheader">MStudent</h2>
+						
 					</ul>
-					<form class="navbar-form navbar-left" role="search">
-						<div class="form-group">
-							<input type="text" class="form-control" />
-						</div> <button type="submit" class="btn btn-default">Submit</button>
-					</form>
 					<ul class="nav navbar-nav navbar-right">
-						<li>
-							<a href="#">Link</a>
-						</li>
+						
 						<li class="dropdown">
-							 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown<strong class="caret"></strong></a>
+							 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Ustawienia <strong class="caret"></strong></a>
 							<ul class="dropdown-menu">
 								<li>
-									<a href="#">Action</a>
+									<a href="#">Profil</a>
 								</li>
 								<li>
-									<a href="#">Another action</a>
+									<a href="#">Wyloguj</a>
 								</li>
-								<li>
-									<a href="#">Something else here</a>
-								</li>
-								<li class="divider">
-								</li>
-								<li>
-									<a href="#">Separated link</a>
-								</li>
+							
 							</ul>
 						</li>
 					</ul>
@@ -186,40 +146,27 @@
 				
 			</nav>
 		</div>
+		</div>
+	</div>
+	<div class="row clearfix">
+	<div class="col-md-12 column">
+	<hr>
+	</div>
 	</div>
 	<div class="row clearfix">
 		<div class="col-md-4 column">
-			<h2>
-				Heading
-			</h2>
-			<p>
-				Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-			</p>
-			<p>
-				<a class="btn" href="#">View details »</a>
-			</p>
+			<img src="img/stopka1.png" alt="Politechnika Rzeszowska" height="80" width="200">
 		</div>
 		<div class="col-md-4 column">
-			<h2>
-				Heading
-			</h2>
-			<p>
-				Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-			</p>
-			<p>
-				<a class="btn" href="#">View details »</a>
-			</p>
+			<img src="img/stopka2.png" alt="Wydział Elektotechniki i Informatyki" align="center" >
 		</div>
 		<div class="col-md-4 column">
-			<h2>
-				Heading
-			</h2>
-			<p>
-				Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-			</p>
-			<p>
-				<a class="btn" href="#">View details »</a>
-			</p>
+			<div class="onethree" style="text-align:right; padding-top: 5px;">
+				Dr hab. inż. JAN PROKOP, prof. PRz
+				<br>Politechnika Rzeszowska
+                <br>Wydział Elektrotechniki i Informatyki
+				<br>ul. W. Pola 2, 35-959 Rzeszów
+			</div>
 		</div>
 	</div>
 </div>
