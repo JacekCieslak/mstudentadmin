@@ -1,5 +1,5 @@
- var url = "http://localhost:8080/mstudent"
-//var url = "http://mstudentservice.jelastic.dogado.eu"
+ //var url = "http://localhost:8080/mstudent"
+var url = "http://mstudentservice.jelastic.dogado.eu"
 
 
   $(document).on("click", ".tablebutton", function(evt){
@@ -13,31 +13,17 @@
 					     error:  function(jqXHR, textStatus, errorThrown) {
 					     	if(textStatus > 500){
 			        		alert("Can not connect to server! " );}
-			   
+
 					     }
 				});
   				$("#preview").show();
-  		
+
   });
 
   function getScheduleId(data,id){
   	for(var i in data){
   		$("#course").html(data[i].classes);
-  		if(data[i].day == "1"){
-  			$("#date").html("Poniedziałek");
-  		}else if(data[i].day == "2"){
-  			$("#date").html("Wtorek");
-  		}else if(data[i].day == "3"){
-  			$("#date").html("Środa");
-  		}else if(data[i].day == "4"){
-  			$("#date").html("Czwartek");
-  		}else if(data[i].day == "5"){
-  			$("#date").html("Piątek");
-  		}else if(data[i].day == "6"){
-  			$("#date").html("Sobota");
-  		}else if(data[i].day == "7"){
-  			$("#date").html("Niedziela");
-  		}
+  		$("#date").html(data[i].day);
   		$("#place").html(data[i].place);
   		$("#week").html(data[i].week);
   		$("#classes").html(data[i].place);
@@ -54,7 +40,7 @@
  $(document).ready(function () {
  		createHarmonogram();
  		$("#preview").hide();
- 
+
  		$("#zwin").click(function(){
   			$("#preview").hide();
   		});
@@ -64,14 +50,14 @@
   		$("#delete").click(function(){
 
   		var id = $("#id").html();
-  			
+
 		var result = confirm("Czy na pewno chcesz usunąć to zajęcia?");
 		if ( result== true) {
 			$.ajax({
 						type:'GET',
 					     url:url+"/adminstrator/schedule/deleteschedule/"+id,
-					     async: false,		
-					     contentType: 'application/x-www-form-urlencoded', 
+					     async: false,
+					     contentType: 'application/x-www-form-urlencoded',
 					  	statusCode: {
 						    200: function() {
 						      		performDelete();
@@ -81,7 +67,7 @@
 					     error:  function(jqXHR, textStatus, errorThrown) {
 					     	if(textStatus > 500){
 			        		alert("Can not connect to server! " );}
-			   
+
 					     }
 			});
 			$("#preview").hide();
@@ -91,37 +77,53 @@
 
   		$("#addSChedule").click(function(){
   			var classes = $("#hClasses :selected").text();
-  			var day = $("#hDay :selected").val();
+  			var day = $("#hDay :selected").text();
   			var hour = $("#hHour :selected").text();
   			var week = $("#hWeek :selected").text();
   			var place = $("#hPlace").val();
   			var audytorium = $("#hAudytorium").val();
   			var info = $("#hInformation").val();
 
+  			var wyrazeniePlace = /^([A-Z]+[0-9]*)$/;
+  			var wyrazenieAudytorium =/^[A-Z]([0-9a-zA-Z_.,-\[\]()\sąćęłńóśźżĄĘŁŃÓŚŹŻ])*$/;
+  			var wyrazeneInfo = /^[A-Z]([0-9a-zA-Z_.,-\[\]()\sąćęłńóśźżĄĘŁŃÓŚŹŻ])*$/;
 
-  			var result = confirm("Czy na pewno chcesz dodać to zajęcie?");
-			if ( result== true) {
-	  			$.ajax({
-					type:"GET",
-					url:url+"/adminstrator/schedule/checkschedule/"+hour+"/"+day+"/?week="+week,
-					dataType: 'json',
-					async: false,
-					statusCode: {
-							    200: function() {
-							      cannotInsertHarmonogram();
-							  		},
-							  		404: function() {
-							     canInsertHarmonogram(classes, day, hour, week, place, audytorium, info)
-							  		}
-							 },
-					success: function(data){ },
-					error:  function(jqXHR, textStatus, errorThrown) {
-						if(textStatus > 500){
-					    	alert("Can not connect to server! " );}
-						
-					}
-				});
-	  		}
+
+  			if(wyrazeniePlace.test(place) && wyrazenieAudytorium.test(audytorium) && wyrazeneInfo.test(info)){
+	  			var result = confirm("Czy na pewno chcesz dodać to zajęcie?");
+				if ( result== true) {
+		  			$.ajax({
+						type:"GET",
+						url:url+"/adminstrator/schedule/checkschedule/"+hour+"/"+day+"/?week="+week,
+						dataType: 'json',
+						async: false,
+						statusCode: {
+								    200: function() {
+								      cannotInsertHarmonogram();
+								  		},
+								  		404: function() {
+								     canInsertHarmonogram(classes, day, hour, week, place, audytorium, info)
+								  		}
+								 },
+						success: function(data){ },
+						error:  function(jqXHR, textStatus, errorThrown) {
+							if(textStatus > 500){
+						    	alert("Can not connect to server! " );}
+
+						}
+					});
+		  		}
+		  	}else{
+		  		var errorMsg = "";
+		  		if(wyrazeniePlace.test(place) == false )
+		  			errorMsg = errorMsg + "Niepoprawna nazwa miejsca. Nazwa miejsca powinna wyglądać np. B100. Dopuszczalne są wyłaczenie pojedyncza litera oraz cyfry. ";
+		  		if(wyrazenieAudytorium.test(audytorium) == false )
+		  			errorMsg = errorMsg + "Niepoprawna treść pola audytorium. W miejscu tym mogą występować wszystkie znaki oprócz znaków specjalnych. ";
+		  		if(wyrazeneInfo.test(info) == false )
+		  			errorMsg = errorMsg + "Niepoprawna treść pola dodatkowe informacje. W miejscu tym mogą występować wszystkie znaki oprócz znaków specjalnych. "
+		  		alert(errorMsg);
+		  	}
+		  	
 
   		});
 
@@ -143,12 +145,12 @@
 				error:  function(jqXHR, textStatus, errorThrown) {
 					if(textStatus > 500){
 				    	alert("Can not connect to server! " );}
-					
+
 				}
 			});
  }
  function cannotInsertHarmonogram(){
- 		alert("Istnieje juz takie zajcię");
+ 		alert("Istnieje juz zajęcie o tej godzinie.");
  }
  function canInsertHarmonogram(classes, day, hour, week, place, audytorium, info){
 
@@ -161,7 +163,7 @@
 				error:  function(jqXHR, textStatus, errorThrown) {
 					if(textStatus > 500){
 				    	alert("Can not connect to server! " );}
-					
+
 				}
 			});
  }
@@ -174,11 +176,10 @@ function onSuccessInsertHarmonogram(){
 
 function  onSuccessCreateHarmonogram(data)
 {
-	alert(data.toString());
-	var dayArray = ["1","2","3","4","5","6","7"];
+	var dayArray = ["Poniedziałek","Wtorek","Środa","Czwartek","Piątek","Sobota","Niedziela"];
 	for(var h = 8 ; h <=20 ; h++ )
 	{
-		tr = $("<tr>");	
+		tr = $("<tr>");
 		tr.append("<td class='first' >"+h+" - "+(h+1)+"</td>");
 		var  l = 0;
 		var status = false;
@@ -186,14 +187,13 @@ function  onSuccessCreateHarmonogram(data)
 		for(var d = 0 ; d < 7 ; d++,l++){
 
 			var tdBody ;
-			
+
 			for(var i in data)
 			if(h === data[i].hour){
-				
 
-				
+
+
 				if(dayArray[d] === data[i].day){
-					alert("jest");
 					if(l % 2 === 0){
 						status = true;
 						if(data[i].classes === 'Wykład')
@@ -217,14 +217,14 @@ function  onSuccessCreateHarmonogram(data)
 				if(l % 2 === 0)
 					tr.append("<td class='next'></td>");
 				else
-				  tr.append("<td class='second'></td>");	
+				  tr.append("<td class='second'></td>");
 			}
 			status = false;
-			
+
 		}
 		tr.append("</tr>");
 		$("#myTable").append(tr);
 	}
-	
+
 }
- 	
+

@@ -1,6 +1,9 @@
- var url = "http://localhost:8080/mstudent"
- //var url = "http://mstudentservice.jelastic.dogado.eu"
+ //var url = "http://localhost:8080/mstudent"
+ var url = "http://mstudentservice.jelastic.dogado.eu"
  var idUser;
+ var surName;
+ var userName;
+ var name;
  $(document).on("change", "#coursesSelectpicker", function(evt){
         var nameChangeGroup = $('#coursesSelectpicker option:selected').html();
         $('#groupsSelectpicker').find('option').remove();
@@ -82,14 +85,14 @@
  			if(wyrazenieTitle.test(newTitle) && wyrazenieGarde.test(newGarde)){
  				$.ajax({
 						type:'GET',
-					     url:url+"/adminstrator/grade/checkgrade/"+newTitle+"?id="+idUser,
+					     url:url+"/adminstrator/grade/checkgrade/"+newTitle+"/"+newGarde+"/?id="+idUser,
 					     async: false,	
 					  	statusCode: {
 						    200: function() {
 						      cannotAddGrade();
 						  		},
 						  	404: function(){
-						  		canAddGrade(newTitle, newGarde, id);	
+						  		canAddGrade(newTitle, newGarde, idUser);	
 						  	}
 						 },
 					     success: function(){},
@@ -206,7 +209,26 @@ $(document).ready(function () {
 					  	statusCode: {
 
 						 },
-					     success: function(){addUser(id)},
+					     success: function(){reloadGrade();},
+					     error:  function(jqXHR, textStatus, errorThrown) {
+					     	if(textStatus > 500){
+			        		alert("Can not connect to server! " );}
+			   
+					     }
+					});
+	 	}
+
+	 	function reloadGrade(){
+	 		var idUser = $("#idGarde").text();
+	 		$.ajax({
+						type:'GET',
+					     url:url+"/adminstrator/grade/user/"+idUser,
+					     async: false,		
+					     contentType: 'application/x-www-form-urlencoded', 
+					  	statusCode: {
+
+						 },
+					     success: function(data){onSuccessGetUserGrade(idUser,data, userName, name, surName)},
 					     error:  function(jqXHR, textStatus, errorThrown) {
 					     	if(textStatus > 500){
 			        		alert("Can not connect to server! " );}
@@ -248,8 +270,9 @@ $(document).ready(function () {
 	
 
 	function performDelete(id){
-		var tr = $("#gradetr_1"+id);
+		var tr = $("#gradetr_"+id);
         tr.css("background-color","#FF3700");
+        reloadGrade();
 
         tr.fadeOut(400, function(){
             tr.remove();
@@ -392,7 +415,7 @@ function onSuccessGetUserGrade(idUser, data, userName, name, surName){
 		  	$("#sTable").append(tr);
       	}
 
-      	tr = $("<tr class='even' id='gradetr_"+data[i].id+"' value="+data[i].id+">");
+      	tr = $("<tr class='even' id='gradetr_"+numer+"' value="+numer+">");
       	tr.append("<td class='ignore'>" + numer + "</td>");
       	tr.append("<td>" + 
 			    		"<textarea style='max-width: 300px;'  class='editbox' rows='2' cols='30' id='newTextTitle'></textarea>"+

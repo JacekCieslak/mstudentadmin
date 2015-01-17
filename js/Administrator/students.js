@@ -209,7 +209,7 @@ $(document).ready(function () {
 	  }else{
 	  	$("#myTable").empty();
 	  	tr = $("<tr class='even'>");
-	  	tr.append("<td class='ignore'>Brak użytkowników w tej grupie</td>");
+	  	tr.append("<td class='ignore'>Brak użytkowników w tej grupie.</td>");
 	  	tr.append("</tr>");
 	  	$("#myTable").append(tr);
     	}

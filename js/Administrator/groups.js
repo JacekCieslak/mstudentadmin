@@ -1,6 +1,6 @@
 
- var url = "http://localhost:8080/mstudent"
- //var url = "http://mstudentservice.jelastic.dogado.eu"
+ //var url = "http://localhost:8080/mstudent"
+ var url = "http://mstudentservice.jelastic.dogado.eu"
 
 $(document).on("click", ".tablebutton", function(evt){
 

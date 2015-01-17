@@ -1,7 +1,7 @@
 var oldName;
 var newName;
-var url = "http://localhost:8080/mstudent";
-//var url = "http://mstudentservice.jelastic.dogado.eu"
+//var url = "http://localhost:8080/mstudent";
+var url = "http://mstudentservice.jelastic.dogado.eu"
 
 $(document).on("click", ".tablebutton", function(evt){
 	var wyrazenieDelete = /delete_[0-9]*/;
@@ -146,8 +146,6 @@ $(document).ready(function () {
 		var name = $('#newCourse ').val();
 		name = name.toUpperCase();
 		var sizeGroup = $('#sizeCourse').val();
-		alert(regCourse.test(name) );
-		alert(regGroup.test(sizeGroup));
 
 		if(regCourse.test(name) && regGroup.test(sizeGroup)){
 			var TandF = confirm("Czy chcesz dodać/zwięjszyć nowy przedmiot: "+name.toUpperCase()+" składającej się z  "+sizeGroup+ " grup?");
