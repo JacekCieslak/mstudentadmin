@@ -21,7 +21,7 @@ $(document).on("click", ".tablebutton", function(evt){
 		if ( result== true) {
 			$.ajax({
 						type:'GET',
-					     url:url+"/adminstrator/courses/deletegroup/"+id,
+					     url:url+"/administrator/course/deletegroup/"+id,
 					     async: false,		
 					     contentType: 'application/x-www-form-urlencoded', 
 					  	statusCode: {
@@ -46,11 +46,11 @@ $(document).on("click", ".tablebutton", function(evt){
 		
 			var id = $(this).parent().parent().parent().attr('value')
 			
-			 $('input[id="course_'+id+'"]').show();
+			// $('input[id="course_'+id+'"]').show();
 			 $('input[id="group_'+id+'"]').show();
 			 $('button[id="update_'+id+'"]').show();
 			 $('button[id="cancel_'+id+'"]').show();
-			 $('span[id="nameSpan_'+id+'"]').hide();
+			// $('span[id="nameSpan_'+id+'"]').hide();
 			 $('span[id="groupSpan_'+id+'"]').hide();
 			 $('button[id="edit_'+id+'"]').parent().hide();
 	}
@@ -58,18 +58,18 @@ $(document).on("click", ".tablebutton", function(evt){
 
 			var id = $(this).parent().parent().parent().attr('value');
 
-			var name = $('input[id="course_'+id+'"]').val();
+			var name = $('span[id="nameSpan_'+id+'"]').text();
 			var group = $('input[id="group_'+id+'"]').val();
 
 			var regCourse = /^[A-Z]([A-Z]|[a-z]|\s|.\.|\-|[0-9])+$/;
 			var regGroup  = /^(1[0-5]?|[2-9]{1})$/;
 
-			if(regCourse.test(name) && regGroup.test(group)){
+			if(regGroup.test(group)){
 				var TandF = confirm("Czy chcesz dodać nową grupę: "+name.toUpperCase()+" L: "+group);
 				if(TandF){
 					$.ajax({
 								type:"GET",
-							     url:url+"/adminstrator/courses/"+group+"/"+name,
+							     url:url+"/administrator/course/courses/"+group+"/"+name,
 							     dataType: 'json',
 							     async: false,
 
@@ -78,7 +78,7 @@ $(document).on("click", ".tablebutton", function(evt){
 								      cannotChange();
 								  		},
 								  		404: function() {
-								      canChange(id, name, group);
+								      canChange(id,name,  group);
 								  		}
 								 },
 							     success: function(){},
@@ -152,7 +152,7 @@ $(document).ready(function () {
 			if(regGroup.test(group)){
 				$.ajax({
 							type:"GET",
-						     url:url+"/adminstrator/courses/"+group+"/"+name,
+						     url:url+"/administrator/course/courses/"+group+"/"+name,
 						     dataType: 'json',
 						     async: false,
 
@@ -186,15 +186,16 @@ $(document).ready(function () {
 
 				$.ajax({
 						type:"POST",
-					     url:url+"/adminstrator/courses/"+id+"?name="+name+"&group="+group,
+					     url:url+"/administrator/course/upadatecourse/"+id+"?name="+name+"&group="+group,
 					     dataType: 'json',
 					     async: false,
 
 					  	statusCode: {
 						    200: function() {
+						    		alert("Grupa została zaktualizowana.");
 						  		}
 						 },
-					     success: function(){alert("jest");},
+					     success: function(){},
 					     error:  function(jqXHR, textStatus, errorThrown) {
 			        		alert("Can not update! " );
 			   
@@ -211,7 +212,7 @@ $(document).ready(function () {
 
 				$.ajax({
 						type:"POST",
-					     url:url+"/adminstrator/courses/addgroup?name="+name+"&group="+group,
+					     url:url+"/administrator/course/addgroup?name="+name+"&group="+group,
 					     dataType: 'json',
 					     async: false,
 
@@ -324,7 +325,7 @@ function getGroupedCourses() {
 function getCourses() {    
         $.ajax({
 		     type:"GET",
-		     url:url+"/adminstrator/courses",
+		     url:url+"/administrator/course/courses",
 		     dataType: 'json',
 		     async: false,
           	procesdata: true,

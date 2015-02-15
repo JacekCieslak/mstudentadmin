@@ -89,8 +89,12 @@
 						</div>
 
 							<select class="selectpicker" id="coursesSelectpicker" data-style="btn-inverse">
+							</select> 
+							Folder: <select class="selectpicker" id="coursesFileSelectpicker" data-style="btn-inverse">
+								<option>Laboratorium</option>
+								<option>Wykład</option>	
 							</select>
-							<button type="button"  id="show" class=" btn btn-success">Wyświetl</button><br>
+							<button type="button"  class="show btn btn-success">Wyświetl</button><br>
 							<hr>
 							
 								<form  method="post" enctype="multipart/form-data" id="sub">
@@ -104,7 +108,7 @@
 					</div>
 					<div class="panel panel-primary">
 			          	<div class="panel-heading">
-							<h3 class="panel-title">Instrukcję:</h3>
+							<h3 class="panel-title">Materiały:</h3>
 
 						</div>
 						<div class="input-group"> <span class="input-group-addon">Filtruj</span>
@@ -116,6 +120,7 @@
 			                   <th>Nr.</th>
 			                    <th>Nazwa</th>
 			                     <th>Przedmiot</th>
+			                     <th>Katalog</th>
 			                      <th>Pobierz</th>
 			                       <th>Usuń</th>
 			                   </thead>

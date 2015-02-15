@@ -22,7 +22,7 @@
 	var wyrazenieOceny = /oceny_[0-9]*/;
 	var wyrazenieAddGrade = /addGrade/;
 
-	var wyrazenieTitle = /^[A-Z]([A-Z]|[a-z]|[ąćęłńóśźżĄĘŁŃÓŚŹŻ]|\s|.\.|\-|[0-9])+$/;
+	var wyrazenieTitle = /^[A-Z]([A-Z]|[a-z]|[ąćęłńóśźżĄĘŁŃÓŚŹŻ]|\s|.\.|\-|\,|[0-9])+$/;
  	var wyrazenieGarde = /^(([2-4]{1})(\,5)?)|5$/;
 
  	var clickButton = $(this).attr('id');
@@ -35,7 +35,7 @@
 		if ( result== true) {
 			$.ajax({
 						type:'GET',
-					     url:url+"/adminstrator/grade/deletegrade/"+id,
+					     url:url+"/administrator/grade/deletegrade/"+id,
 					     async: false,		
 					     contentType: 'application/x-www-form-urlencoded', 
 					  	statusCode: {
@@ -60,7 +60,7 @@
 
  			$.ajax({
 						type:'GET',
-					     url:url+"/adminstrator/grade/user/"+idUser,
+					     url:url+"/administrator/grade/user/"+idUser,
 					     async: false,		
 					     contentType: 'application/x-www-form-urlencoded', 
 					  	statusCode: {
@@ -85,7 +85,7 @@
  			if(wyrazenieTitle.test(newTitle) && wyrazenieGarde.test(newGarde)){
  				$.ajax({
 						type:'GET',
-					     url:url+"/adminstrator/grade/checkgrade/"+newTitle+"/"+newGarde+"/?id="+idUser,
+					     url:url+"/administrator/grade/checkgrade/"+newTitle+"/"+newGarde+"/?id="+idUser,
 					     async: false,	
 					  	statusCode: {
 						    200: function() {
@@ -141,7 +141,7 @@
  				var oldGarde = $('span[id="gGrade_'+id+'"]').text();
  				$.ajax({
 						type:'GET',
-					    url:url+"/adminstrator/grade/checkgrade/"+newTitle+"/"+newGarde+"?id="+idUser,
+					    url:url+"/administrator/grade/checkgrade/"+newTitle+"/"+newGarde+"?id="+idUser,
 					     async: false,	
 					  	statusCode: {
 						    200: function() {
@@ -203,7 +203,7 @@ $(document).ready(function () {
  	function canAddGrade(newTitle, newGarde, id){
  			$.ajax({
 						type:'POST',
-					     url:url+"/adminstrator/grade/addgrade/"+id+"?title="+newTitle+"&grade="+newGarde,
+					     url:url+"/administrator/grade/addgrade/"+id+"?title="+newTitle+"&grade="+newGarde,
 					     async: false,		
 					     contentType: 'application/x-www-form-urlencoded', 
 					  	statusCode: {
@@ -222,7 +222,7 @@ $(document).ready(function () {
 	 		var idUser = $("#idGarde").text();
 	 		$.ajax({
 						type:'GET',
-					     url:url+"/adminstrator/grade/user/"+idUser,
+					     url:url+"/administrator/grade/user/"+idUser,
 					     async: false,		
 					     contentType: 'application/x-www-form-urlencoded', 
 					  	statusCode: {
@@ -240,7 +240,7 @@ $(document).ready(function () {
 	 function canUpdateGrade(newTitle, newGarde, id){
  			$.ajax({
 						type:'POST',
-					     url:url+"/adminstrator/grade/updategrade/"+id+"?title="+newTitle+"&grade="+newGarde,
+					     url:url+"/administrator/grade/updategrade/"+id+"?title="+newTitle+"&grade="+newGarde,
 					     async: false,		
 					     contentType: 'application/x-www-form-urlencoded', 
 					  	statusCode: {
@@ -445,7 +445,7 @@ function onSuccessGetUserGrade(idUser, data, userName, name, surName){
     function getGroups(name) {   
         $.ajax({
 		     type:"GET",
-		     url:url+"/adminstrator/user/group/"+name,
+		     url:url+"/administrator/user/group/"+name,
 		     dataType: 'json',
 		     async: false,
           	procesdata: true,
@@ -476,7 +476,7 @@ function onSuccessGetUserGrade(idUser, data, userName, name, surName){
 	function getStudents(name, id) {    
        $.ajax({
 				type:"GET",
-				url:url+"/adminstrator/user/users/"+name+"/"+id,
+				url:url+"/administrator/user/users/"+name+"/"+id,
 				dataType: 'json',
 				 async: false,
 				statusCode: {

@@ -8,8 +8,15 @@ $(document).ready(function () {
 
  		var userName = $("input[name='username']").val();
  		var password = $("input[name='password']").val();
-		authenticate( userName, password ); 
+    var wyrazenieLogin = /^([A-Z][a-z]*)$/;
+    var wyrazeniePassword = /^([A-Z][a-z]*)$/;
+
+	 if(wyrazenieLogin.test(userName) && wyrazeniePassword.test(password)){
+  	authenticate( userName, password ); 
+
   	    result = [];
+      }else
+      alert("Niepoprawne hasło lub login!");
 
 	});
 });

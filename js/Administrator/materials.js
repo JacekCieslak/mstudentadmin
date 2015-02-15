@@ -17,38 +17,49 @@
 		var id = $(this).parent().parent().parent().attr('value');
 
 		var nameDocument = $('span[id="nameSpan_'+id+'"]').text();
-		
+		var course = $("#coursesSelectpicker :selected").text();
+		var fileCourse	=$("#coursesFileSelectpicker :selected").text();
+		alert(nameDocument+" course "+course+" fileCourse "+fileCourse+" ID "+id);
 		var result = confirm("Czy na pewno chcesz usunąć dokument "+nameDocument+"?");
+		var fileDeleted = false;
+
 		if ( result== true) {
-			$.ajax({
-						type:'GET',
-					     url:url+"/file/attachment/delete?file="+nameDocument,
-					     async: false,		
-					     contentType: 'application/x-www-form-urlencoded', 
-					  	statusCode: {
-						    200: function() {
-						      	performDelete(id);
-						  		}
-						 },
-					     success: function(){},
-					     error:  function(jqXHR, textStatus, errorThrown) {
-					     	if(textStatus > 500){
-			        		alert("Can not connect to server! " );}
-			   
-					     }
-					});
+			if(fileCourse == "Laboratorium")
+				var deleteURL = url+"/file/attachment/delete?file="+nameDocument.toLowerCase()+"&course="+course.toLowerCase()+"&coursetype=laboratorium";
+			else
+				var deleteURL = url+"/file/attachment/delete?file="+nameDocument.toLowerCase()+"&course="+course.toLowerCase()+"&coursetype=wyklady";
+			
+				$.ajax({
+							type:'GET',
+						     url:deleteURL,
+						     dataType: 'json',
+
+						     async: false,		
+						  	
+						     success: function(){},
+						     error:  function(jqXHR, textStatus, errorThrown) {
+						     	if(textStatus > 500){
+				        		alert("Can not connect to server! " );}
+				   
+						     }
+				});
+			
 	//	$('#coursesSelectpicker').find('option').remove();
 		} 
+		performDelete(id);
+
 		$("#myTable").empty();
-		getCourses();
+		getCourseFiles(course, fileCourse);
+		//getCourseFiles(course, fileCourse);
 				showPages();
 	}
  });
 
 $(document).ready(function () {
 		getGroupedCourses();
-		var name = $(".selectpicker :selected").text();
-		getCourseFiles(name);
+		var course = $("#coursesSelectpicker :selected").text();
+		var fileCourse	=$("#coursesFileSelectpicker :selected").text();
+		getCourseFiles(course, fileCourse);
 
 		
 	    (function ($) {
@@ -74,41 +85,58 @@ $(document).ready(function () {
     	var filePath = $("#sub").children().children().val();
 	  	var  splithPath = filePath.split("\\");
 	    var regFileName = /^([0-9A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ\s._-]*.pdf)$/;
-		var name = $(".selectpicker :selected").text();
+		var courseName = $("#coursesSelectpicker :selected").text();
+		var fileCourse = $("#coursesFileSelectpicker :selected").text();
+
+		
 	    if(regFileName.test(splithPath[2])){
-	    		checkFileName(splithPath[2],name);
+	    		checkFileName(splithPath[2],courseName,fileCourse);
 	    		if(TandF != true){
-		    	    $.ajax({
-					      url: url+"/file/upload",
-					      type: 'POST',
-					      data: new FormData( this ),
-					      processData: false,
-					      contentType: false
-					       
-					    });
-				 	e.preventDefault();
+	    			if(fileCourse == "Laboratorium"){
+	    						alert("Dodanie labki");
+					    	    $.ajax({		
+								      url: url+"/file/upload/labs?name="+courseName,
+								      type: 'POST',
+								      data: new FormData( this ),
+								      processData: false,
+								      contentType: false
+								       
+								    });
+							 	e.preventDefault();
+					}else{
+								   $.ajax({		
+								      url: url+"/file/upload/course?name="+courseName,
+								      type: 'POST',
+								      data: new FormData( this ),
+								      processData: false,
+								      contentType: false
+								       
+								    });
+							 	e.preventDefault();
+
+					}
 				 }else
 				 alert("Istnieje juz taki dokument dla przedmiotu: "+name+".");
+				 e.preventDefault();
 		}else{
 			alert("Można dodawać wyłacznie pliki z rozszerzeniem .pdf. zawierające litery,cyfry oraz znaki ._-");
 			 e.preventDefault();
 		}
   	});
 
-	 $( "#show" ).click(function() {
-	 	var name = $(".selectpicker :selected").text();
-		getCourseFiles(name);
+	 $( ".show" ).click(function() {
+	 	var course = $("#coursesSelectpicker :selected").text();
+		var fileCourse	=$("#coursesFileSelectpicker :selected").text();
+		getCourseFiles(course, fileCourse);
 	 });
 
 });
 
 	function performDelete(id){
-		alert("asd");
 		$.ajax({
 						type:'GET',
-					     url:url+"/document/attachment/deletedocument/"+id,
-					     async: false,		
-					     contentType: 'application/x-www-form-urlencoded', 
+					     url:url+"/administrator/document/deletedocument?id="+id,
+					     async: false,		 
 					     success: function(){},
 					     error:  function(jqXHR, textStatus, errorThrown) {
 					     	if(textStatus > 500){
@@ -118,7 +146,6 @@ $(document).ready(function () {
 					});
 		var tr = $("#tr_"+id);
         tr.css("background-color","#FF3700");
-        reloadGrade();
 
         tr.fadeOut(400, function(){
             tr.remove();
@@ -136,10 +163,10 @@ $(document).ready(function () {
 		e.preventDefault();
 	}
 
-	function checkFileName(documentName, courseName){
+	function checkFileName(documentName, courseName, fileCourse){
 		$.ajax({
 						type:"GET",
-						url:url+"/adminstrator/document/getdocument/?name="+documentName+"&coursename="+courseName,
+						url:url+"/administrator/document/getdocument/?name="+documentName+"&coursename="+courseName+"&type="+fileCourse,
 						dataType: 'json',
 						async: false,
 
@@ -149,7 +176,7 @@ $(document).ready(function () {
 							},
 							404: function() {
 								TandF = false;	
-								canInsertDocument(documentName,courseName);
+								canInsertDocument(documentName,courseName,fileCourse);
 
 														}
 						},
@@ -161,15 +188,15 @@ $(document).ready(function () {
 			});
 	}
 
-	function canInsertDocument(documentName,courseName){
+	function canInsertDocument(documentName,courseName, fileCourse){
 		$.ajax({
 						type:"POST",
-						url:url+"/adminstrator/document/insertdocument/?name="+documentName+"&coursename="+courseName,
+						url:url+"/administrator/document/insertdocument/?name="+documentName+"&coursename="+courseName+"&type="+fileCourse,
 						dataType: 'json',
 						async: false,
 					success: function(){
 								var name = $(".selectpicker :selected").text();
-								getCourseFiles(name); 
+								getCourseFiles(name, fileCourse); 
 							}, 	
 					error:  function(jqXHR, textStatus, errorThrown) {
 					if(textStatus > 500){
@@ -194,15 +221,15 @@ $(document).ready(function () {
 
   function onSuccessGroupCourses(data){
   		for(var i in data){
-  			$(".selectpicker").append("<option value="+i+">"+data[i].name+"</option");
+  			$("#coursesSelectpicker").append("<option value="+i+">"+data[i].name+"</option");
   		}
   }
 
 
-  function getCourseFiles(name) {    
+  function getCourseFiles(course,fileCourse) {    
         $.ajax({
 		     type:"GET",
-		     url:url+"/adminstrator/document/getdocuments?course="+name,
+		     url:url+"/administrator/document/getdocuments?course="+course+"&type="+fileCourse,
 		     dataType: 'json',
 		     async: false,
           	statusCode: {
@@ -239,6 +266,9 @@ $(document).ready(function () {
 		    		  "</td>");
 		    tr.append("<td>" + 
 		    			"<span  id='groupSpan_"+data[i].id+"'>" + data[i].course + "</span>"+
+		    		  "</td>");
+		     tr.append("<td>" + 
+		    			"<span  id='typeGroup"+data[i].id+"'>" + data[i].type + "</span>"+
 		    		  "</td>");
 		    tr.append("<td>"+
 		    				"<p  data-placement='top' data-toggle='tooltip' title='Edytuj'>"+

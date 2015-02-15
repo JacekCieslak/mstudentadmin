@@ -6,7 +6,7 @@ var url = "http://mstudentservice.jelastic.dogado.eu"
   		var id = $(this).attr('value');
   		$.ajax({
 						type:"GET",
-					     url:url+"/adminstrator/schedule/getschedule/"+id,
+					     url:url+"/administrator/schedule/getschedule/"+id,
 					     dataType: 'json',
 					     async: false,
 					     success: function(data){ getScheduleId(data, id)},
@@ -55,7 +55,7 @@ var url = "http://mstudentservice.jelastic.dogado.eu"
 		if ( result== true) {
 			$.ajax({
 						type:'GET',
-					     url:url+"/adminstrator/schedule/deleteschedule/"+id,
+					     url:url+"/administrator/schedule/deleteschedule/"+id,
 					     async: false,
 					     contentType: 'application/x-www-form-urlencoded',
 					  	statusCode: {
@@ -94,7 +94,7 @@ var url = "http://mstudentservice.jelastic.dogado.eu"
 				if ( result== true) {
 		  			$.ajax({
 						type:"GET",
-						url:url+"/adminstrator/schedule/checkschedule/"+hour+"/"+day+"/?week="+week,
+						url:url+"/administrator/schedule/checkschedule/"+hour+"/"+day+"/?week="+week,
 						dataType: 'json',
 						async: false,
 						statusCode: {
@@ -138,7 +138,7 @@ var url = "http://mstudentservice.jelastic.dogado.eu"
  function createHarmonogram(){
  			$.ajax({
 				type:"GET",
-				url:url+"/adminstrator/schedule/getschedule",
+				url:url+"/administrator/schedule/getschedule",
 				dataType: 'json',
 				async: false,
 				success: function(data){ onSuccessCreateHarmonogram(data)},
@@ -156,7 +156,7 @@ var url = "http://mstudentservice.jelastic.dogado.eu"
 
  			$.ajax({
 				type:"POST",
-				url:url+"/adminstrator/schedule/addschedule?classes="+classes+"&hour="+hour+"&day="+day+"&week="+week+"&place="+place+"&audytorium="+audytorium+"&information="+info,
+				url:url+"/administrator/schedule/addschedule?classes="+classes+"&hour="+hour+"&day="+day+"&week="+week+"&place="+place+"&audytorium="+audytorium+"&information="+info,
 				dataType: 'json',
 				async: false,
 				success: function(data){ onSuccessInsertHarmonogram(data)},

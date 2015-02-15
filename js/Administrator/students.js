@@ -26,7 +26,7 @@
 		if ( result== true) {
 			$.ajax({
 						type:'GET',
-					     url:url+"/adminstrator/user/deleteuser/"+id,
+					     url:url+"/administrator/user/deleteuser/"+id,
 					     async: false,		
 					     contentType: 'application/x-www-form-urlencoded', 
 					  	statusCode: {
@@ -49,7 +49,7 @@
  	
  			$.ajax({
 						type:'POST',
-					     url:url+"/adminstrator/user/adduser/"+id,
+					     url:url+"/administrator/user/adduser/"+id,
 					     async: false,		
 					     contentType: 'application/x-www-form-urlencoded', 
 					  	statusCode: {
@@ -106,7 +106,7 @@ $(document).ready(function () {
 		var id = $("#groupsSelectpicker :selected").text();
 				$.ajax({
 						type:"GET",
-					     url:url+"/adminstrator/user/users/"+name+"/"+id,
+					     url:url+"/administrator/user/users/"+name+"/"+id,
 					     dataType: 'json',
 					     async: false,
 					     tatusCode: {
@@ -236,7 +236,7 @@ function getGroupedCourses() {
     function getGroups(name) {   
         $.ajax({
 		     type:"GET",
-		     url:url+"/adminstrator/user/group/"+name,
+		     url:url+"/administrator/user/group/"+name,
 		     dataType: 'json',
 		     async: false,
           	procesdata: true,
@@ -267,7 +267,7 @@ function getGroupedCourses() {
 	function getStudents(name, id) {    
         $.ajax({
 		     type:"GET",
-		     url:url+"/adminstrator/user/users/"+name+"/"+id,
+		     url:url+"/administrator/user/users/"+name+"/"+id,
 		     dataType: 'json',
 		     async: false,
           	procesdata: true,

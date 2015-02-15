@@ -1,7 +1,7 @@
 var oldName;
 var newName;
-//var url = "http://localhost:8080/mstudent";
-var url = "http://mstudentservice.jelastic.dogado.eu"
+var url = "http://localhost:8080/mstudent";
+//var url = "http://mstudentservice.jelastic.dogado.eu"
 
 $(document).on("click", ".tablebutton", function(evt){
 	var wyrazenieDelete = /delete_[0-9]*/;
@@ -22,7 +22,7 @@ $(document).on("click", ".tablebutton", function(evt){
 		if ( result== true) {
 			$.ajax({
 						type:'GET',
-					     url:url+"/courses/deleteusers/"+name,
+					     url:url+"/administrator/course/deleteusers/"+name,
 					     async: false,
 					     contentType: 'application/x-www-form-urlencoded',
 					  	statusCode: {
@@ -64,7 +64,7 @@ $(document).on("click", ".tablebutton", function(evt){
 				{
 					$.ajax({
 								type:"GET",
-							     url:url+"/adminstrator/courses/getcourse?name="+newName,
+							     url:url+"/administrator/course/getcourse?name="+newName,
 							     dataType: 'json',
 							     async: false,
 
@@ -146,20 +146,21 @@ $(document).ready(function () {
 		var name = $('#newCourse ').val();
 		name = name.toUpperCase();
 		var sizeGroup = $('#sizeCourse').val();
+		var courseFileNoExist = false;
 
 		if(regCourse.test(name) && regGroup.test(sizeGroup)){
 			var TandF = confirm("Czy chcesz dodać/zwięjszyć nowy przedmiot: "+name.toUpperCase()+" składającej się z  "+sizeGroup+ " grup?");
 			if(TandF){
 				for(i=1 ; i <=parseInt(sizeGroup) ; i++){
-
 						$.ajax({
 								type:"GET",
-							     url:url+"/adminstrator/courses/"+i+"/"+name,
+							     url:url+"/administrator/course/courses/"+i+"/"+name,
 							     dataType: 'json',
 							     async: false,
 
 							  	statusCode: {
 								    200: function() {
+								    	courseFileNoExist = true;
 								      cannotInsertCourse(name, i);
 								  		},
 								  		404: function() {
@@ -174,19 +175,35 @@ $(document).ready(function () {
 							     }
 							});
 				}
+				if(courseFileNoExist)
+					addCourseFile(name);
 			}
 		}
 		else {
-			alert("Niepoprawna Tytuł przedmiotu lub wartość oceny! Tytuł powinien zaczynać sie z dużej litery i może posiadać znaki  -., Grupy mogą być z zakresu 1-15. ");
+			alert("Niepoprawny tytuł przedmiotu lub ilość grup! Tytuł powiniem składać się z dużych znaków. Moze zawierać litery, cyfry oraz znak -. Grupy mogą być z zakresu 1-15.");
 			}
-			
-		
+
+
 	});
 
 	// $("#courses").click(function(){
 	// 	alet("click");
 	// })
 });
+	function addCourseFile(name){
+		$.ajax({
+								type:"POST",
+							     url:url+"/file/addcourse?name="+name,
+							     dataType: 'json',
+							     async: false,
+							     success: function(){},
+							     error:  function(jqXHR, textStatus, errorThrown) {
+							     	if(textStatus > 500){
+					        		alert("Can not connect to server! " );}
+
+							     }
+							});
+	}
 
 	function cannotChange(name){
 		alert("Istnieje juz przedmiot: "+name);
@@ -201,7 +218,7 @@ $(document).ready(function () {
 	function canChange(id, oldName, newName){
 				$.ajax({
 						type:"POST",
-					     url:url+"/adminstrator/courses/updatecourse?oldname="+oldName+"&newname="+newName,
+					     url:url+"/administrator/course/updatecourse?oldname="+oldName+"&newname="+newName,
 					     dataType: 'json',
 					     async: false,
 
@@ -225,7 +242,7 @@ $(document).ready(function () {
 
 				$.ajax({
 						type:"POST",
-					     url:url+"/adminstrator/courses/insertcourse?name="+name+"&group="+group,
+					     url:url+"/administrator/course/insertcourse?name="+name+"&group="+group,
 					     dataType: 'json',
 					     async: false,
 
@@ -250,7 +267,7 @@ $(document).ready(function () {
 	function performDelete(id,name){
 		$.ajax({
 						type:'GET',
-					     url:url+"/adminstrator/courses/deletecourse/"+name,
+					     url:url+"/administrator/course/deletecourse/"+name,
 					     async: false,
 					     contentType: 'application/x-www-form-urlencoded',
 					  	statusCode: {
